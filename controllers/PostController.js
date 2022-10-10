@@ -21,10 +21,22 @@ export const create = async (req, res) => {
 export const getAll = async (req, res) => {
     try {
         const posts = await PostModel.find().populate('user').exec()
+        //console.log(posts)
         res.json(posts)
     } catch (e) {
         res.status(500).json({
             message: 'Не удалось извлечь статьи'
+        })
+    }
+}
+export const getLastTags = async (req, res) => {
+    try {
+        const posts = await PostModel.find().limit(5).exec()
+        const tags = posts.map(obj=>obj.tags).flat().slice(0,5)
+        res.json(tags)
+    } catch (e) {
+        res.status(500).json({
+            message: 'Не удалось извлечь теги'
         })
     }
 }
@@ -79,6 +91,29 @@ export const remove = async (req, res) => {
     } catch (e) {
         res.status(500).json({
             message: 'Не удалось извлечь статьи'
+        })
+    }
+}
+export const update = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        await PostModel.updateOne({
+                _id: postId
+            },
+            {
+                title: req.body.title,
+                text: req.body.text,
+                tags: req.body.tags,
+                imageUrl: req.body.imageUrl,
+                user: req.userId
+            },
+        )
+        res.json({
+            message: 'статья обновлена'
+        })
+    } catch (e) {
+        res.status(500).json({
+            message: 'Не удалось обновить статью'
         })
     }
 }
