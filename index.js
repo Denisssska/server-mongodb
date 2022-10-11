@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import {loginValidation, registerValidation} from './validations/auth.js';
+import {loginValidation, registerValidation, updateValidation} from './validations/auth.js';
 import checkAuth from "./utils/checkAuth.js";
 import {postsCreateValidation} from "./validations/postsValidation.js";
 import multer from 'multer'
@@ -22,8 +22,9 @@ const storage = multer.diskStorage({
         cb(null, file.originalname)
     }
 })
+
 const upload = multer({storage})
-// mongodb+srv://admin:wwwwww@cluster0.hwtxh3m.mongodb.net/blog?retryWrites=true&w=majority&tls=true
+
 mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://admin:wwwwww@cluster0.hwtxh3m.mongodb.net/blog?retryWrites=true&w=majority&tls=true')
     .then(
         () => {
@@ -31,7 +32,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://admin:wwwwww@cluster0
         }
     ).catch((err) => console.log('db error', err));
 
-let allowCrossDomain = function(req, res, next) {
+let allowCrossDomain = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,PATH,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
@@ -39,8 +40,7 @@ let allowCrossDomain = function(req, res, next) {
     // intercept OPTIONS method
     if ('OPTIONS' === req.method) {
         res.send(200);
-    }
-    else {
+    } else {
         next();
     }
 };
@@ -57,10 +57,16 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
         url: `/uploads/${req.file.originalname}`
     })
 })
+app.post('/update', checkAuth, upload.single('image'), (req, res) => {
+    res.json({
+        url: `/uploads/${req.file.originalname}`
+    })
+})
 
 app.post('/auth/register', registerValidation, handleValidationErrors, UserController.registration);
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login);
 app.get('/auth/me', checkAuth, UserController.authMe);
+app.patch('/auth/:id',checkAuth,updateValidation,UserController.updateUser);
 
 app.post('/posts', checkAuth, postsCreateValidation, handleValidationErrors, PostController.create);
 app.patch('/posts/:id', checkAuth, postsCreateValidation, handleValidationErrors, PostController.update);

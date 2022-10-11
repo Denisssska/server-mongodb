@@ -10,3 +10,6 @@ export const loginValidation = [
     body('email', 'Неверный формат почты').isEmail(),
     body('password', 'Пароль минимум 5 символов').isLength({min: 5}),
 ]
+export const updateValidation = [
+    body('avatarUrl', 'Неверная ссылка на аватарку').isURL(),
+]

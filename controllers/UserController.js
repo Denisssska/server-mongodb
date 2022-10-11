@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import UserModel from "../models/User.js";
 import jwt from "jsonwebtoken";
+import PostModel from "../models/Post.js";
 
 export const registration = async (req, res) => {
     try {
@@ -81,3 +82,22 @@ export const authMe = async (req, res) => {
         })
     }
 };
+export const updateUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        await UserModel.updateOne({
+                _id: userId
+            },
+            {
+                avatarUrl:req.body.avatarUrl
+            },
+        )
+        res.json({
+            message: 'фото обновлено'
+        })
+    } catch (e) {
+        res.status(500).json({
+            message: 'Не удалось обновить фото'
+        })
+    }
+}
