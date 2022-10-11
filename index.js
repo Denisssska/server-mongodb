@@ -9,7 +9,8 @@ import multer from 'multer'
 import handleValidationErrors from "./utils/handleValidationErrors.js";
 import * as UserController from "./controllers/UserController.js";
 import * as PostController from "./controllers/PostController.js";
-import fs from 'fs';
+import * as fs from "fs";
+
 
 const storage = multer.diskStorage({
     destination: (_, __, cb) => {
