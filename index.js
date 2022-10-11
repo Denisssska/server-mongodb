@@ -3,7 +3,6 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import {loginValidation, registerValidation} from './validations/auth.js';
 import checkAuth from "./utils/checkAuth.js";
-
 import {postsCreateValidation} from "./validations/postsValidation.js";
 import multer from 'multer'
 import handleValidationErrors from "./utils/handleValidationErrors.js";
@@ -25,15 +24,21 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage})
 // mongodb+srv://admin:wwwwww@cluster0.hwtxh3m.mongodb.net/blog?retryWrites=true&w=majority&tls=true
-mongoose.connect(process.env.MONGODB_URI )
+mongoose.connect(process.env.MONGODB_URI)
     .then(
         () => {
             console.log('db connected')
         }
     ).catch((err) => console.log('db error', err));
 
+const corsOptions ={
+    origin:'*',
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200,
+}
+
 const app = express()
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use('/uploads', express.static('uploads'))//чтобы можно было открыть картинку в урле
 
