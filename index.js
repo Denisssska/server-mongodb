@@ -13,9 +13,9 @@ import * as fs from "fs";
 
 const storage = multer.diskStorage({
     destination: (_, __, cb) => {
-        if (fs.existsSync('uploads')) {
-            fs.mkdirSync('uploads')    //если нет папки аплоадс то создаем ее
-        }
+        // if (fs.existsSync('uploads')) {
+        //     fs.mkdirSync('uploads')    //если нет папки аплоадс то создаем ее
+        // }
         cb(null, 'uploads')
     },
     filename: (_, file, cb) => {
@@ -33,8 +33,8 @@ mongoose.connect(process.env.MONGODB_URI)
 
 let allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    // res.header('Access-Control-Allow-Methods', 'GET,PUT,PATH,POST,DELETE,OPTIONS');
-    // res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,PATH,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
     // intercept OPTIONS method
     if ('OPTIONS' === req.method) {
