@@ -9,10 +9,13 @@ import multer from 'multer'
 import handleValidationErrors from "./utils/handleValidationErrors.js";
 import * as UserController from "./controllers/UserController.js";
 import * as PostController from "./controllers/PostController.js";
-
+import fs from 'fs';
 
 const storage = multer.diskStorage({
     destination: (_, __, cb) => {
+        if (fs.existsSync('uploads')) {
+            fs.mkdirSync('uploads')    //если нет папки аплоадс то создаем ее
+        }
         cb(null, 'uploads')
     },
     filename: (_, file, cb) => {
