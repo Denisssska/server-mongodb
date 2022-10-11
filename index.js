@@ -13,9 +13,9 @@ import * as fs from "fs";
 
 const storage = multer.diskStorage({
     destination: (_, __, cb) => {
-        if (fs.existsSync('uploads')) {
-            fs.mkdirSync('uploads')    //если нет папки аплоадс то создаем ее
-        }
+        // if (fs.existsSync('uploads')) {
+        //     fs.mkdirSync('uploads')    //если нет папки аплоадс то создаем ее
+        // }
         cb(null, 'uploads')
     },
     filename: (_, file, cb) => {
