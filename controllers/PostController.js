@@ -61,7 +61,7 @@ export const getOne = async (req, res) => {
                 })
             }
             res.json(doc)
-        })
+        }).populate('user')
     } catch (e) {
         res.status(500).json({
             message: 'Не удалось извлечь статьи'
