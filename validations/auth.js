@@ -12,4 +12,6 @@ export const loginValidation = [
 ]
 export const updateValidation = [
     body('avatarUrl', 'Неверная ссылка на аватарку').isURL(),
+    body('fullName', 'Укажите имя').isLength({min: 3}),
+
 ]
