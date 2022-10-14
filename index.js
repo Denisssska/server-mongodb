@@ -68,7 +68,7 @@ app.post('/update', checkAuth, upload.single('image'), (req, res) => {
 app.post('/auth/register', registerValidation, handleValidationErrors, UserController.registration);
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login);
 app.get('/auth/me', checkAuth, UserController.authMe);
-app.patch('/auth/:id',checkAuth,updateValidation,UserController.updateUser);
+app.patch('/auth/:id', checkAuth, updateValidation, UserController.updateUser);
 
 app.post('/posts', checkAuth, postsCreateValidation, handleValidationErrors, PostController.create);
 app.patch('/posts/:id', checkAuth, postsCreateValidation, handleValidationErrors, PostController.update);
@@ -76,12 +76,12 @@ app.get('/posts', PostController.getAll);
 app.get('/tags', PostController.getLastTags);
 app.get('/posts/:id', PostController.getOne);
 app.delete('/posts/:id', checkAuth, PostController.remove);
-app.get('/posts/popular/:limit',checkAuth,postsCreateValidation,PostController.getAllPostByViews);
+app.get('/posts/popular/:limit', checkAuth, postsCreateValidation, PostController.getAllPostByViews);
 
 app.post('/comments', checkAuth, commentsCreateValidation, handleValidationErrors, CommentsController.create);
-app.get('/comments/:id',CommentsController.getAllInPost)
-app.get('/comments',CommentsController.getAll)
-
+app.get('/comments/:id', CommentsController.getAllInPost)
+app.get('/comments', CommentsController.getAll)
+app.delete('/comments/:id', checkAuth, CommentsController.remove);
 const PORT = process.env.PORT || 6006
 const start = async () => {
     try {
