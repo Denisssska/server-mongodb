@@ -1,5 +1,5 @@
 import PostModel from "../models/Post.js";
-import {registration} from "./UserController.js";
+
 
 export const create = async (req, res) => {
     try {

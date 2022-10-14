@@ -82,6 +82,8 @@ app.post('/comments', checkAuth, commentsCreateValidation, handleValidationError
 app.get('/comments/:id', CommentsController.getAllInPost)
 app.get('/comments', CommentsController.getAll)
 app.delete('/comments/:id', checkAuth, CommentsController.remove);
+app.patch('/comments/:id', checkAuth, commentsCreateValidation, handleValidationErrors, CommentsController.update);
+
 const PORT = process.env.PORT || 6006
 const start = async () => {
     try {

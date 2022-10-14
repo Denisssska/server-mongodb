@@ -3,7 +3,6 @@ import post from "../models/Post.js";
 
 export const create = async (req, res) => {
     try {
-        console.log(req)
         const doc = new CommentsModel({
             comments: req.body.comments,
             user: req.userId,
@@ -21,10 +20,7 @@ export const create = async (req, res) => {
 export const getAllInPost = async (req, res) => {
     try {
         const postId = req.params.id;
-        console.log(postId)
-         //const comments = await CommentsModel.find().populate('user').exec()
-         const comments = await CommentsModel.find({postId}).populate('user').exec()
-        //console.log(comments)
+        const comments = await CommentsModel.find({postId}).populate('user').exec()
         if (!comments) {
             return res.status(404).json({
                 message: 'комментарии не найдены'
@@ -39,7 +35,7 @@ export const getAllInPost = async (req, res) => {
 }
 export const getAll = async (req, res) => {
     try {
-         const comments = await CommentsModel.find().populate('user').exec()
+        const comments = await CommentsModel.find().populate('user').exec()
         if (!comments) {
             return res.status(404).json({
                 message: 'комментарии не найдены'
@@ -54,46 +50,46 @@ export const getAll = async (req, res) => {
 }
 // text-overflow: ellipsis;
 
-export const getLastTags = async (req, res) => {
-    // try {
-    //     const posts = await PostModel.find().limit(5).exec()
-    //     const tags = posts.map(obj=>obj.tags).flat().slice(0,5)
-    //     res.json(tags)
-    // } catch (e) {
-    //     res.status(500).json({
-    //         message: 'Не удалось извлечь теги'
-    //     })
-    // }
+export const getLastComments = async (req, res) => {
+    try {
+        const comments = await CommentsModel.find().limit(2).exec()
+        // const tags = comments.map(obj=>obj.comments).flat().slice(0,2)
+        res.json(comments)
+    } catch (e) {
+        res.status(500).json({
+            message: 'Не удалось извлечь комментарии'
+        })
+    }
 }
 
-export const getOne = async (req, res) => {
-    // try {
-    //     const postId = req.params.id;
-    //     PostModel.findOneAndUpdate({
-    //         _id: postId,
-    //     }, {
-    //         $inc: {viewsCount: 1}
-    //     }, {
-    //         returnDocument: 'after'
-    //     }, (err, doc) => {
-    //         if (err) {
-    //             return res.status(500).json({
-    //                 message: 'Не удалось вернуть статью'
-    //             })
-    //         }
-    //         if (!doc) {
-    //             return res.status(404).json({
-    //                 message: 'Статья не найдена'
-    //             })
-    //         }
-    //         res.json(doc)
-    //     }).populate('user')
-    // } catch (e) {
-    //     res.status(500).json({
-    //         message: 'Не удалось извлечь статьи'
-    //     })
-    // }
-}
+// export const getOne = async (req, res) => {
+// try {
+//     const postId = req.params.id;
+//     PostModel.findOneAndUpdate({
+//         _id: postId,
+//     }, {
+//         $inc: {viewsCount: 1}
+//     }, {
+//         returnDocument: 'after'
+//     }, (err, doc) => {
+//         if (err) {
+//             return res.status(500).json({
+//                 message: 'Не удалось вернуть статью'
+//             })
+//         }
+//         if (!doc) {
+//             return res.status(404).json({
+//                 message: 'Статья не найдена'
+//             })
+//         }
+//         res.json(doc)
+//     }).populate('user')
+// } catch (e) {
+//     res.status(500).json({
+//         message: 'Не удалось извлечь статьи'
+//     })
+// }
+// }
 export const remove = async (req, res) => {
     try {
         const commentsId = req.params.id;
@@ -121,25 +117,23 @@ export const remove = async (req, res) => {
     }
 }
 export const update = async (req, res) => {
-    // try {
-    //     const postId = req.params.id;
-    //     await PostModel.updateOne({
-    //             _id: postId
-    //         },
-    //         {
-    //             title: req.body.title,
-    //             text: req.body.text,
-    //             tags: req.body.tags,
-    //             imageUrl: req.body.imageUrl,
-    //             user: req.userId
-    //         },
-    //     )
-    //     res.json({
-    //         message: 'статья обновлена'
-    //     })
-    // } catch (e) {
-    //     res.status(500).json({
-    //         message: 'Не удалось обновить статью'
-    //     })
-    // }
+    try {
+        const commentsId = req.params.id;
+        await CommentsModel.updateOne({
+                _id: commentsId
+            },
+            {
+                comments: req.body.comments,
+                postId: req.body.postId,
+                user: req.userId
+            },
+        )
+        res.json({
+            message: 'комментарий обновлен'
+        })
+    } catch (e) {
+        res.status(500).json({
+            message: 'Не удалось обновить комментарий'
+        })
+    }
 }
