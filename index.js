@@ -8,7 +8,9 @@ import multer from 'multer'
 import handleValidationErrors from "./utils/handleValidationErrors.js";
 import * as UserController from "./controllers/UserController.js";
 import * as PostController from "./controllers/PostController.js";
+import * as CommentsController from "./controllers/CommentsController.js";
 import * as fs from "fs";
+import {commentsCreateValidation} from "./validations/CommentsValidation.js";
 
 
 const storage = multer.diskStorage({
@@ -74,6 +76,11 @@ app.get('/posts', PostController.getAll);
 app.get('/tags', PostController.getLastTags);
 app.get('/posts/:id', PostController.getOne);
 app.delete('/posts/:id', checkAuth, PostController.remove);
+app.get('/posts/popular/:limit',checkAuth,postsCreateValidation,PostController.getAllPostByViews);
+
+app.post('/comments', checkAuth, commentsCreateValidation, handleValidationErrors, CommentsController.create);
+app.get('/comments/:id',CommentsController.getAllInPost)
+app.get('/comments',CommentsController.getAll)
 
 const PORT = process.env.PORT || 6006
 const start = async () => {

@@ -1,4 +1,5 @@
 import PostModel from "../models/Post.js";
+import {registration} from "./UserController.js";
 
 export const create = async (req, res) => {
     try {
@@ -21,7 +22,6 @@ export const create = async (req, res) => {
 export const getAll = async (req, res) => {
     try {
         const posts = await PostModel.find().populate('user').exec()
-        //console.log(posts)
         res.json(posts)
     } catch (e) {
         res.status(500).json({
@@ -29,11 +29,25 @@ export const getAll = async (req, res) => {
         })
     }
 }
+// text-overflow: ellipsis;
+
 export const getLastTags = async (req, res) => {
     try {
         const posts = await PostModel.find().limit(5).exec()
         const tags = posts.map(obj=>obj.tags).flat().slice(0,5)
         res.json(tags)
+    } catch (e) {
+        res.status(500).json({
+            message: 'Не удалось извлечь теги'
+        })
+    }
+}
+export const getAllPostByViews = async (req, res) => {
+    try {
+        const limit =  req.params.limit
+        const posts = await PostModel.find().populate('user').limit(limit).exec()
+
+        res.json(posts)
     } catch (e) {
         res.status(500).json({
             message: 'Не удалось извлечь теги'
