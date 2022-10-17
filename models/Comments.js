@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const CommentsSchema = new mongoose.Schema({
+
     comments:{
         type:String,
         required: true
