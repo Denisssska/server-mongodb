@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const CommentsSchema = new mongoose.Schema({
     comments:{
-        type:Array,
-        default:[]
+        type:String,
+        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
