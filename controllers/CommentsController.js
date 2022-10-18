@@ -2,6 +2,7 @@ import CommentsModel from "../models/Comments.js";
 import post from "../models/Post.js";
 
 export const create = async (req, res) => {
+
     try {
         const doc = new CommentsModel({
             comments: req.body.comments,
