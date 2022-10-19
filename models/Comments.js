@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const CommentsSchema = new mongoose.Schema({
 
-    comments:{
-        type:String,
+    comments: {
+        type: String,
         required: true
     },
     user: {
@@ -15,11 +15,6 @@ const CommentsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // post:{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Post',
-    //     required: true
-    // }
 }, {
     timestamps: true,
 })
