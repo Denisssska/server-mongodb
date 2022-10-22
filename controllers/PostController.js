@@ -119,6 +119,7 @@ export const update = async (req, res) => {
                 text: req.body.text,
                 tags: req.body.tags,
                 imageUrl: req.body.imageUrl,
+                commentsCount:req.body.commentsCount,
                 user: req.userId
             },
         )
