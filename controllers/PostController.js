@@ -33,7 +33,7 @@ export const create = async (req, res) => {
 export const getLastTags = async (req, res) => {
     try {
         const posts = await PostModel.find().limit(5).exec()
-        const tags = posts.map(obj=>obj.tags).flat().slice(0,5)
+        const tags = posts.map(obj => obj.tags).flat().slice(0, 5)
         res.json(tags)
     } catch (e) {
         res.status(500).json({
@@ -43,7 +43,7 @@ export const getLastTags = async (req, res) => {
 }
 export const getAllPostByViews = async (req, res) => {
     try {
-        const limit =  req.params.limit
+        const limit = req.params.limit
         const posts = await PostModel.find().populate('user').limit(limit).exec()
 
         res.json(posts)
@@ -54,14 +54,13 @@ export const getAllPostByViews = async (req, res) => {
     }
 }
 export const getSortPosts = async (req, res) => {
-    console.log(req.body.sorts)
-
+   // console.log(req.headers.sorts)
     try {
-        if(req.body.sorts === "commentsCount"){
-            const posts = await PostModel.find().sort({commentsCount:-1}).populate('user').exec()
+        if (req.headers.sorts === "commentsCount") {
+            const posts = await PostModel.find().sort({commentsCount: -1}).populate('user').exec()
             res.json(posts)
-        }else if(req.body.sorts === "viewsCount"){
-            const posts = await PostModel.find().sort({viewsCount:-1}).populate('user').exec()
+        } else if (req.headers.sorts === "viewsCount") {
+            const posts = await PostModel.find().sort({viewsCount: -1}).populate('user').exec()
             res.json(posts)
         }
 
@@ -136,7 +135,7 @@ export const update = async (req, res) => {
                 text: req.body.text,
                 tags: req.body.tags,
                 imageUrl: req.body.imageUrl,
-                commentsCount:req.body.commentsCount,
+                commentsCount: req.body.commentsCount,
                 user: req.userId
             },
         )
