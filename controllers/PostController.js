@@ -18,16 +18,16 @@ export const create = async (req, res) => {
         })
     }
 };
-export const getAll = async (req, res) => {
-    try {
-        const posts = await PostModel.find().populate('user').exec()
-        res.json(posts)
-    } catch (e) {
-        res.status(500).json({
-            message: 'Не удалось извлечь статьи'
-        })
-    }
-}
+// export const getAll = async (req, res) => {
+//     try {
+//         const posts = await PostModel.find().populate('user').exec()
+//         res.json(posts)
+//     } catch (e) {
+//         res.status(500).json({
+//             message: 'Не удалось извлечь статьи'
+//         })
+//     }
+// }
 // text-overflow: ellipsis;
 
 export const getLastTags = async (req, res) => {
@@ -53,6 +53,17 @@ export const getAllPostByViews = async (req, res) => {
         })
     }
 }
+export const getSortPosts = async (req, res) => {
+    try {
+        const posts = await PostModel.find().sort({commentsCount:-1}).populate('user').exec()
+
+        res.json(posts)
+    } catch (e) {
+        res.status(500).json({
+            message: 'Не удалось извлечь посты'
+        })
+    }
+}
 export const getOne = async (req, res) => {
     try {
         const postId = req.params.id;
@@ -65,7 +76,7 @@ export const getOne = async (req, res) => {
         }, (err, doc) => {
             if (err) {
                 return res.status(500).json({
-                    message: 'Не удалось вернуть статью'
+                    message: 'Не удалось навернуть статью'
                 })
             }
             if (!doc) {

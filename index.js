@@ -72,11 +72,13 @@ app.patch('/auth/:id', checkAuth, updateValidation, UserController.updateUser);
 
 app.post('/posts', checkAuth, postsCreateValidation, handleValidationErrors, PostController.create);
 app.patch('/posts/:id', checkAuth, postsCreateValidation, handleValidationErrors, PostController.update);
-app.get('/posts', PostController.getAll);
+// app.get('/posts', PostController.getAll);
 app.get('/tags', PostController.getLastTags);
 app.get('/posts/:id', PostController.getOne);
 app.delete('/posts/:id', checkAuth, PostController.remove);
+
 app.get('/posts/popular/:limit', checkAuth, postsCreateValidation, PostController.getAllPostByViews);
+app.get('/posts',PostController.getSortPosts);
 
 app.post('/comments', checkAuth, commentsCreateValidation, handleValidationErrors, CommentsController.create);
 app.get('/comments/:id', CommentsController.getAllInPost)
