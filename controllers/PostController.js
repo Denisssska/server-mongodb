@@ -54,10 +54,17 @@ export const getAllPostByViews = async (req, res) => {
     }
 }
 export const getSortPosts = async (req, res) => {
-    try {
-        const posts = await PostModel.find().sort({commentsCount:-1}).populate('user').exec()
+    console.log(req.body.sorts)
 
-        res.json(posts)
+    try {
+        if(req.body.sorts === "commentsCount"){
+            const posts = await PostModel.find().sort({commentsCount:-1}).populate('user').exec()
+            res.json(posts)
+        }else if(req.body.sorts === "viewsCount"){
+            const posts = await PostModel.find().sort({viewsCount:-1}).populate('user').exec()
+            res.json(posts)
+        }
+
     } catch (e) {
         res.status(500).json({
             message: 'Не удалось извлечь посты'
@@ -76,7 +83,7 @@ export const getOne = async (req, res) => {
         }, (err, doc) => {
             if (err) {
                 return res.status(500).json({
-                    message: 'Не удалось навернуть статью'
+                    message: 'Не удалось вернуть статью'
                 })
             }
             if (!doc) {
