@@ -1,8 +1,6 @@
 import bcrypt from "bcrypt";
 import UserModel from "../models/User.js";
 import jwt from "jsonwebtoken";
-import PostModel from "../models/Post.js";
-
 export const registration = async (req, res) => {
     try {
         //прячем пороль

@@ -1,6 +1,5 @@
 import PostModel from "../models/Post.js";
 
-
 export const create = async (req, res) => {
     try {
         const doc = new PostModel({
@@ -8,7 +7,7 @@ export const create = async (req, res) => {
             text: req.body.text,
             tags: req.body.tags,
             imageUrl: req.body.imageUrl,
-            user: req.userId
+            user: req.userId,
         })
         const post = await doc.save()
         res.json(post)
