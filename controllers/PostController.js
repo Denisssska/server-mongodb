@@ -56,8 +56,8 @@ export const getAllPostByViews = async (req, res) => {
 export const getSortPosts = async (req, res) => {
    // console.log(req.headers.sorts)
     try {
-        if (req.headers.sorts === "commentsCount") {
-            const posts = await PostModel.find().sort({commentsCount: -1}).populate('user').exec()
+        if (req.headers.sorts === "createdAt") {
+            const posts = await PostModel.find().sort({createdAt: -1}).populate('user').exec()
             res.json(posts)
         } else if (req.headers.sorts === "viewsCount") {
             const posts = await PostModel.find().sort({viewsCount: -1}).populate('user').exec()
