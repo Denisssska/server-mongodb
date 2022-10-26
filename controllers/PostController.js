@@ -18,16 +18,7 @@ export const create = async (req, res) => {
         })
     }
 };
-// export const getAll = async (req, res) => {
-//     try {
-//         const posts = await PostModel.find().populate('user').exec()
-//         res.json(posts)
-//     } catch (e) {
-//         res.status(500).json({
-//             message: 'Не удалось извлечь статьи'
-//         })
-//     }
-// }
+
 // text-overflow: ellipsis;
 
 export const getLastTags = async (req, res) => {
@@ -55,15 +46,16 @@ export const getAllPostByViews = async (req, res) => {
 }
 
 export const getSortPosts = async (req, res) => {
+    console.log(req.query)
     try {
-        if (req.headers.sorts === "createdAt") {
+        if (req.query.sorts === "createdAt") {
             const posts = await PostModel.find().sort({createdAt: -1}).populate('user').exec()
             res.json(posts)
-        } else if (req.headers.sorts === "viewsCount") {
+        } else if (req.query.sorts === "viewsCount") {
             const posts = await PostModel.find().sort({viewsCount: -1}).populate('user').exec()
             res.json(posts)
         } else {
-            const posts = await PostModel.find({tags: req.headers.sorts}).populate('user').exec()
+            const posts = await PostModel.find({tags: req.query.sorts}).populate('user').exec()
             res.json(posts)
         }
     } catch (e) {
@@ -84,7 +76,7 @@ export const getOne = async (req, res) => {
         }, (err, doc) => {
             if (err) {
                 return res.status(500).json({
-                    message: 'Не удалось вернуть статью'
+                    message: 'Не удалось навернуть статью'
                 })
             }
             if (!doc) {
