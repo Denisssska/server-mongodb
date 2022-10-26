@@ -82,6 +82,7 @@ app.get('/posts/popular/:limit', checkAuth, postsCreateValidation, PostControlle
 app.get('/posts',PostController.getSortPosts);
 
 app.post('/comments', checkAuth, commentsCreateValidation, handleValidationErrors, CommentsController.create);
+app.get('/comments',CommentsController.getLastComments)
 app.get('/comments/:id', CommentsController.getAllInPost)
 app.get('/comments', CommentsController.getAll)
 app.delete('/comments/:id', checkAuth, CommentsController.remove);

@@ -46,7 +46,7 @@ export const getAllPostByViews = async (req, res) => {
 }
 
 export const getSortPosts = async (req, res) => {
-    console.log(req.query)
+    //console.log(req.query)
     try {
         if (req.query.sorts === "createdAt") {
             const posts = await PostModel.find().sort({createdAt: -1}).populate('user').exec()

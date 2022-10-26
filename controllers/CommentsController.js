@@ -1,5 +1,4 @@
 import CommentsModel from "../models/Comments.js";
-import post from "../models/Post.js";
 
 export const create = async (req, res) => {
     try {
@@ -51,8 +50,10 @@ export const getAll = async (req, res) => {
 // text-overflow: ellipsis;
 
 export const getLastComments = async (req, res) => {
+    console.log(req.query.item)
     try {
-        const comments = await CommentsModel.find().limit(2).exec()
+        const item = req.query.item
+        const comments = await CommentsModel.find().sort({createdAt:-1}).limit(item).populate('user').exec()
         // const tags = comments.map(obj=>obj.comments).flat().slice(0,2)
         res.json(comments)
     } catch (e) {
@@ -62,34 +63,6 @@ export const getLastComments = async (req, res) => {
     }
 }
 
-// export const getOne = async (req, res) => {
-// try {
-//     const postId = req.params.id;
-//     PostModel.findOneAndUpdate({
-//         _id: postId,
-//     }, {
-//         $inc: {viewsCount: 1}
-//     }, {
-//         returnDocument: 'after'
-//     }, (err, doc) => {
-//         if (err) {
-//             return res.status(500).json({
-//                 message: 'Не удалось вернуть статью'
-//             })
-//         }
-//         if (!doc) {
-//             return res.status(404).json({
-//                 message: 'Статья не найдена'
-//             })
-//         }
-//         res.json(doc)
-//     }).populate('user')
-// } catch (e) {
-//     res.status(500).json({
-//         message: 'Не удалось извлечь статьи'
-//     })
-// }
-// }
 export const remove = async (req, res) => {
     try {
         const commentsId = req.params.id;
