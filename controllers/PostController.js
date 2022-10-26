@@ -53,8 +53,8 @@ export const getAllPostByViews = async (req, res) => {
         })
     }
 }
+
 export const getSortPosts = async (req, res) => {
-   // console.log(req.headers.sorts)
     try {
         if (req.headers.sorts === "createdAt") {
             const posts = await PostModel.find().sort({createdAt: -1}).populate('user').exec()
@@ -62,8 +62,10 @@ export const getSortPosts = async (req, res) => {
         } else if (req.headers.sorts === "viewsCount") {
             const posts = await PostModel.find().sort({viewsCount: -1}).populate('user').exec()
             res.json(posts)
+        } else {
+            const posts = await PostModel.find({tags: req.headers.sorts}).populate('user').exec()
+            res.json(posts)
         }
-
     } catch (e) {
         res.status(500).json({
             message: 'Не удалось извлечь посты'
