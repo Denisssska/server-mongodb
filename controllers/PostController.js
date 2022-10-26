@@ -55,7 +55,7 @@ export const getSortPosts = async (req, res) => {
             const posts = await PostModel.find().sort({viewsCount: -1}).populate('user').exec()
             res.json(posts)
         } else {
-            const posts = await PostModel.find({tags: req.query.sorts}).populate('user').exec()
+            const posts = await PostModel.find({tags: req.query.sorts}).sort({createdAt: -1}).populate('user').exec()
             res.json(posts)
         }
     } catch (e) {
