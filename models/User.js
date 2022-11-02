@@ -13,6 +13,18 @@ const UserSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    verifyToken: {
+        type: String,
+    },
+    tokenDeathTime: {
+        type: Number,
+    },
+    resetPasswordToken: {
+        type: String,
+    },
+    resetPasswordTokenDeathTime: {
+        type: Number,
+    },
     avatarUrl:String
 },{
     timestamps:true,

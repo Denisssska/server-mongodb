@@ -15,3 +15,9 @@ export const updateValidation = [
     body('fullName', 'Укажите имя').isLength({min: 3}),
 
 ]
+
+export const emailRegExp = /^[\w][\w-.]*@[\w-]+\.[a-z]{2,7}$/i;
+
+export const emailValidator = (email)=> emailRegExp.test(email); // true - valid
+
+export const passwordValidator = (password) => password.length > 7; // true - valid

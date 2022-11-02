@@ -36,7 +36,6 @@ export const getAllPostByViews = async (req, res) => {
     try {
         const limit = req.params.limit
         const posts = await PostModel.find().populate('user').limit(limit).exec()
-
         res.json(posts)
     } catch (e) {
         res.status(500).json({
@@ -46,7 +45,7 @@ export const getAllPostByViews = async (req, res) => {
 }
 
 export const getSortPosts = async (req, res) => {
-    //console.log(req.query)
+
     try {
         if (req.query.sorts === "createdAt") {
             const posts = await PostModel.find().sort({createdAt: -1}).populate('user').exec()

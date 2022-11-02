@@ -11,6 +11,7 @@ import * as PostController from "./controllers/PostController.js";
 import * as CommentsController from "./controllers/CommentsController.js";
 import * as fs from "fs";
 import {commentsCreateValidation} from "./validations/CommentsValidation.js";
+import {LOCAL_PORT, MongoDBDen} from "./utils/config.js";
 
 
 const storage = multer.diskStorage({
@@ -26,8 +27,8 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({storage})
-
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://admin:wwwwww@cluster0.hwtxh3m.mongodb.net/blog?retryWrites=true&w=majority&tls=true')
+// 'mongodb+srv://admin:wwwwww@cluster0.hwtxh3m.mongodb.net/blog?retryWrites=true&w=majority&tls=true'
+mongoose.connect(process.env.MONGODB_URI || MongoDBDen)
     .then(
         () => {
             console.log('db connected')
@@ -88,12 +89,14 @@ app.get('/comments', CommentsController.getAll)
 app.delete('/comments/:id', checkAuth, CommentsController.remove);
 app.patch('/comments/:id', checkAuth, commentsCreateValidation, handleValidationErrors, CommentsController.update);
 
-const PORT = process.env.PORT || 6006
+app.post("/auth/sendpasswordlink",UserController.sendMail)
+
+const PORT = process.env.PORT || LOCAL_PORT
 const start = async () => {
     try {
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
     } catch (e) {
-        console.log(e)
+        console.log({...e})
     }
 }
 start()

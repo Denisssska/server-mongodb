@@ -1,6 +1,47 @@
 import bcrypt from "bcrypt";
 import UserModel from "../models/User.js";
 import jwt from "jsonwebtoken";
+import {transporter} from "../utils/GmailController.js";
+
+export const sendMail = async (req, res) => {
+    const {email} = req.body;
+    if (!email) {
+        res.status(401).json({status: 401, message: "Enter Your Email"})
+    }
+    try {
+        const userFind = await UserModel.findOne({email})
+        const token = jwt.sign({
+                _id: userFind._id
+            },
+            'secretKey123',
+            {
+                expiresIn: '30d',//сколько будет жить токен
+            }
+        );
+        const setUserToken = await UserModel.findByIdAndUpdate({_id: userFind._id}, {verifyToken: token}, {new: true})
+        if (setUserToken) {
+            const mailOptions = {
+                from: "denis7@mail.ru",
+                to: email,
+                subject: "Sending Email For password Reset",
+                text: `This link valid for 2 minutes http://localhost:3000/forgotpasword/${userFind._id}/${setUserToken.verifyToken}`
+            }
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log("error", error)
+                    res.status(401).json({status:401,message:"email not send"})
+                }else {
+                    console.log("Email sent",info.response)
+                    res.status(201).json({status:201,message:"Email sent successfully"})
+                }
+            })
+        }
+        // res.json({...userData, token})
+    } catch (e) {
+        res.status(401).json({status:401,message:"invalid user"})
+    }
+};
+
 export const registration = async (req, res) => {
     try {
         //прячем пороль
@@ -87,7 +128,7 @@ export const updateUser = async (req, res) => {
                 _id: userId
             },
             {
-                avatarUrl:req.body.avatarUrl,
+                avatarUrl: req.body.avatarUrl,
                 fullName: req.body.fullName,
             },
         )
