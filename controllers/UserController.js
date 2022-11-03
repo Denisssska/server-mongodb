@@ -21,10 +21,10 @@ export const sendMail = async (req, res) => {
         const setUserToken = await UserModel.findByIdAndUpdate({_id: userFind._id}, {verifyToken: token}, {new: true})
         if (setUserToken) {
             const mailOptions = {
-                from: "denis7@mail.ru",
-                to: email,
+                from: email,
+                to: "yarmoshkoden18m@gmail.com",
                 subject: "Sending Email For password Reset",
-                text: `This link valid for 2 minutes http://localhost:3000/forgotpasword/${userFind._id}/${setUserToken.verifyToken}`
+                text: `This link valid for 2 minutes http://localhost:3000/forgot/${userFind._id}/${setUserToken.verifyToken}`
             }
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {

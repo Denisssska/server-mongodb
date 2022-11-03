@@ -89,7 +89,7 @@ app.get('/comments', CommentsController.getAll)
 app.delete('/comments/:id', checkAuth, CommentsController.remove);
 app.patch('/comments/:id', checkAuth, commentsCreateValidation, handleValidationErrors, CommentsController.update);
 
-app.post("/auth/sendpasswordlink",UserController.sendMail)
+app.post("/auth/send-password-link",UserController.sendMail)
 
 const PORT = process.env.PORT || LOCAL_PORT
 const start = async () => {
