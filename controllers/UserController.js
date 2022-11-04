@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import {transporter} from "../utils/GmailController.js";
 
 export const sendMail = async (req, res) => {
-    const {email} = req.body;
+    const {email,message} = req.body;
     if (!email) {
         res.status(401).json({status: 401, message: "Enter Your Email"})
     }
@@ -22,9 +22,9 @@ export const sendMail = async (req, res) => {
         if (setUserToken) {
             const mailOptions = {
                 from: email,
-                to: "yarmoshkoden18m@gmail.com",
+                to: email,
                 subject: "Sending Email For password Reset",
-                text: `This link valid for 2 minutes http://localhost:3000/forgot/${userFind._id}/${setUserToken.verifyToken}`
+                text: `http://localhost:3000/create-password/${userFind._id}/${setUserToken.verifyToken}`
             }
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
