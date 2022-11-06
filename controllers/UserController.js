@@ -6,8 +6,9 @@ import {transporter} from "../utils/GmailController.js";
 export const createNewPassword = async (req,res)=>{
     const {id,token}= req.params
     const password = req.query.password
-   // console.log(id)
-   // console.log(password)
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(password, salt)
+
     console.log(token)
     try {
         const validUser = await UserModel.findOne({_id:id,verifyToken: token})
