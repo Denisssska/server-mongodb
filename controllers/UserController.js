@@ -3,6 +3,26 @@ import UserModel from "../models/User.js";
 import jwt from "jsonwebtoken";
 import {transporter} from "../utils/GmailController.js";
 
+export const createNewPassword = async (req,res)=>{
+    const {id,token}= req.params
+    const password = req.query.password
+   // console.log(id)
+   // console.log(password)
+    console.log(token)
+    try {
+        const validUser = await UserModel.findOne({_id:id,verifyToken: token})
+        const verifyToken = jwt.verify(token,'secretKey123')
+        if(validUser && verifyToken){
+            res.status(201).json({status:201,validUser})
+        }else{
+            res.status(401).json({status:401,message:"user is not exists"})
+        }
+    }catch (e) {
+        res.status(401).json({status:401,message:e})
+    }
+
+}
+
 export const sendMail = async (req, res) => {
     const {email,message} = req.body;
     if (!email) {
