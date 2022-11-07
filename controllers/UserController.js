@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import UserModel from "../models/User.js";
 import jwt from "jsonwebtoken";
 import {transporter} from "../utils/GmailController.js";
+
 export const createNewPassword = async (req, res) => {
     const {id, token} = req.params
     const password = req.query.password
@@ -9,7 +10,6 @@ export const createNewPassword = async (req, res) => {
     const hash = await bcrypt.hash(password, salt)
     try {
         const validUser = await UserModel.findOne({_id: id, verifyToken: token})
-        //console.log(validUser)
         const verifyToken = jwt.verify(token, 'secretKey123')
         if (validUser && verifyToken) {
             await UserModel.updateOne({_id: id}, {passwordHash: hash})
@@ -71,7 +71,6 @@ export const sendMail = async (req, res) => {
                     }
                 })
             }
-            // res.json({...userData, token})
         } catch
             (e) {
             res.status(401).json({status: 401, message: "invalid user"})
@@ -89,7 +88,7 @@ export const registration = async (req, res) => {
         const doc = new UserModel({
             email: req.body.email,
             fullName: req.body.fullName,
-            avatarUrl: req.body.avatarUrl,
+            avatarUrl: req.body.avatarUrl || "/uploads/ava.jpg",
             passwordHash: hash
         })
         const user = await doc.save();
