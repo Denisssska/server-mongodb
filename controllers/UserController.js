@@ -14,7 +14,7 @@ export const createNewPassword = async (req, res) => {
         const verifyToken = jwt.verify(token, 'secretKey123')
         if (validUser && verifyToken) {
             await UserModel.updateOne({_id: id}, {passwordHash: hash})
-             res.status(201).json({status:201,message:"password changed successfully"})
+            res.status(201).json({status: 201, message: "password changed successfully"})
         } else {
             res.status(401).json({status: 401, message: "user is not exists"})
         }
@@ -25,44 +25,60 @@ export const createNewPassword = async (req, res) => {
 }
 
 export const sendMail = async (req, res) => {
-    const {email, message} = req.body;
-    if (!email) {
-        res.status(401).json({status: 401, message: "Enter Your Email"})
-    }
-    try {
-        const userFind = await UserModel.findOne({email})
-        const token = jwt.sign({
-                _id: userFind._id
-            },
-            'secretKey123',
-            {
-                expiresIn: '30d',//сколько будет жить токен
-            }
-        );
-        const setUserToken = await UserModel.findByIdAndUpdate({_id: userFind._id}, {verifyToken: token}, {new: true})
-        if (setUserToken) {
-            const mailOptions = {
-                from: email,
-                to: email,
-                subject: "Sending Email For password Reset",
-                //http://localhost:3000/create-password
-                text: `http://localhost:3000/create-password/${userFind._id}/${setUserToken.verifyToken}`
-            }
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log("error", error)
-                    res.status(401).json({status: 401, message: "email not send"})
-                } else {
-                    console.log("Email sent", info.response)
-                    res.status(201).json({status: 201, message: "Email sent successfully"})
-                }
-            })
+        const {email, message} = req.body;
+        if (!email) {
+            res.status(401).json({status: 401, message: "Enter Your Email"})
         }
-        // res.json({...userData, token})
-    } catch (e) {
-        res.status(401).json({status: 401, message: "invalid user"})
+        try {
+            const userFind = await UserModel.findOne({email})
+            const token = jwt.sign({
+                    _id: userFind._id
+                },
+                'secretKey123',
+                {
+                    expiresIn: '30d',//сколько будет жить токен
+                }
+            );
+            const setUserToken = await UserModel.findByIdAndUpdate({_id: userFind._id}, {verifyToken: token}, {new: true})
+            let html = message;
+
+            if (message && message.includes("$token$")) {
+                do {
+                    html = html.replace("$token$", token);
+                } while (html.includes("$token$"));
+            }
+            if (message && message.includes("$id$")) {
+                do {
+                    html = html.replace("$id$", userFind._id);
+                } while (html.includes("$id$"));
+            }
+
+            if (setUserToken) {
+                const mailOptions = {
+                    from: email,
+                    to: email,
+                    subject: "Sending Email For password Reset",
+                    //http://localhost:3000/create-password
+                    //text: `http://localhost:3000/create-password/${userFind._id}/${setUserToken.verifyToken}`,
+                    html: html
+                }
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        console.log("error", error)
+                        res.status(401).json({status: 401, message: "email not send"})
+                    } else {
+                        console.log("Email sent", info.response)
+                        res.status(201).json({status: 201, message: "Email sent successfully"})
+                    }
+                })
+            }
+            // res.json({...userData, token})
+        } catch
+            (e) {
+            res.status(401).json({status: 401, message: "invalid user"})
+        }
     }
-};
+;
 
 export const registration = async (req, res) => {
     try {
