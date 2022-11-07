@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 import UserModel from "../models/User.js";
 import jwt from "jsonwebtoken";
 import {transporter} from "../utils/GmailController.js";
-import bird from "../uploads/bird.jpg"
 export const createNewPassword = async (req, res) => {
     const {id, token} = req.params
     const password = req.query.password
@@ -90,7 +89,7 @@ export const registration = async (req, res) => {
         const doc = new UserModel({
             email: req.body.email,
             fullName: req.body.fullName,
-            avatarUrl: req.body.avatarUrl || bird,
+            avatarUrl: req.body.avatarUrl,
             passwordHash: hash
         })
         const user = await doc.save();
