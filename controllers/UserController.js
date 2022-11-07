@@ -3,29 +3,29 @@ import UserModel from "../models/User.js";
 import jwt from "jsonwebtoken";
 import {transporter} from "../utils/GmailController.js";
 
-export const createNewPassword = async (req,res)=>{
-    const {id,token}= req.params
+export const createNewPassword = async (req, res) => {
+    const {id, token} = req.params
     const password = req.query.password
     const salt = await bcrypt.genSalt(10)
     const hash = await bcrypt.hash(password, salt)
-
-    console.log(token)
     try {
-        const validUser = await UserModel.findOne({_id:id,verifyToken: token})
-        const verifyToken = jwt.verify(token,'secretKey123')
-        if(validUser && verifyToken){
-            res.status(201).json({status:201,validUser})
-        }else{
-            res.status(401).json({status:401,message:"user is not exists"})
+        const validUser = await UserModel.findOne({_id: id, verifyToken: token})
+        //console.log(validUser)
+        const verifyToken = jwt.verify(token, 'secretKey123')
+        if (validUser && verifyToken) {
+            await UserModel.updateOne({_id: id}, {passwordHash: hash})
+             res.status(201).json({status:201,message:"password changed successfully"})
+        } else {
+            res.status(401).json({status: 401, message: "user is not exists"})
         }
-    }catch (e) {
-        res.status(401).json({status:401,message:e})
+    } catch (e) {
+        res.status(401).json({status: 401, message: e})
     }
 
 }
 
 export const sendMail = async (req, res) => {
-    const {email,message} = req.body;
+    const {email, message} = req.body;
     if (!email) {
         res.status(401).json({status: 401, message: "Enter Your Email"})
     }
@@ -45,21 +45,22 @@ export const sendMail = async (req, res) => {
                 from: email,
                 to: email,
                 subject: "Sending Email For password Reset",
+                //http://localhost:3000/create-password
                 text: `http://localhost:3000/create-password/${userFind._id}/${setUserToken.verifyToken}`
             }
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     console.log("error", error)
-                    res.status(401).json({status:401,message:"email not send"})
-                }else {
-                    console.log("Email sent",info.response)
-                    res.status(201).json({status:201,message:"Email sent successfully"})
+                    res.status(401).json({status: 401, message: "email not send"})
+                } else {
+                    console.log("Email sent", info.response)
+                    res.status(201).json({status: 201, message: "Email sent successfully"})
                 }
             })
         }
         // res.json({...userData, token})
     } catch (e) {
-        res.status(401).json({status:401,message:"invalid user"})
+        res.status(401).json({status: 401, message: "invalid user"})
     }
 };
 
