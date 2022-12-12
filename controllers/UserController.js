@@ -142,6 +142,7 @@ export const login = async (req, res) => {
     }
 };
 export const authMe = async (req, res) => {
+   //console.log(req)
     try {
         const user = await UserModel.findById(req.userId)
         if (!user) {
