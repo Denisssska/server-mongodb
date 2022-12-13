@@ -35,18 +35,18 @@ mongoose.connect(process.env.MONGODB_URI || MongoDBDen)
         }
     ).catch((err) => console.log('db error', err));
 
-let allowCrossDomain = function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    // res.header('Access-Control-Allow-Credentials', 'true');
-    // res.header('Access-Control-Allow-Methods', 'GET,PUT,PATH,POST,DELETE,OPTIONS');
-    // res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, Content-Length, X-Requested-With');
-    // intercept OPTIONS method
-    if ('OPTIONS' === req.method) {
-        res.send(200);
-    } else {
-        next();
-    }
-};
+// let allowCrossDomain = function (req, res, next) {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     // res.header('Access-Control-Allow-Credentials', 'true');
+//     // res.header('Access-Control-Allow-Methods', 'GET,PUT,PATH,POST,DELETE,OPTIONS');
+//     // res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, Content-Length, X-Requested-With');
+//     // intercept OPTIONS method
+//     if ('OPTIONS' === req.method) {
+//         res.send(200);
+//     } else {
+//         next();
+//     }
+// };
 const corsOptions = {
     credentials: true,
     origin: (origin, callback) => {
@@ -61,7 +61,7 @@ const corsOptions = {
 const app = express()
 
 app.use(cors(corsOptions))
-app.use(allowCrossDomain)
+// app.use(allowCrossDomain)
 
 app.use(express.json())
 app.use('/uploads', express.static('uploads'))//чтобы можно было открыть картинку в урле
