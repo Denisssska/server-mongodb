@@ -36,7 +36,7 @@ mongoose.connect(process.env.MONGODB_URI || MongoDBDen)
     ).catch((err) => console.log('db error', err));
 
 let allowCrossDomain = function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://front-posts-cxx9vtncr-denisssska.vercel.app/','https://server-blog-mongodb.herokuapp.com/');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,PATH,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, Content-Length, X-Requested-With');
@@ -50,13 +50,13 @@ let allowCrossDomain = function (req, res, next) {
 const corsOptions = {
     credentials: true,
     origin: (origin, callback) => {
-    // if(whitelist.includes(origin || ""))
-    //     return callback(null, true)
-    //
-    // callback(new Error('Not allowed by CORS'));
-    console.log("origin: ", origin);
-    callback(null, true); // everyone is allowed
-}
+        // if(whitelist.includes(origin || ""))
+        //     return callback(null, true)
+        //
+        // callback(new Error('Not allowed by CORS'));
+        console.log("origin: ", origin);
+        callback(null, true); // everyone is allowed
+    }
 };
 const app = express()
 
@@ -81,8 +81,8 @@ app.post('/auth/register', registerValidation, handleValidationErrors, UserContr
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login);
 app.get('/auth/me', checkAuth, UserController.authMe);
 app.patch('/auth/:id', checkAuth, updateValidation, UserController.updateUser);
-app.post("/auth/send-password-link",UserController.sendMail)
-app.get("/auth/create-new-password/:id/:token",UserController.createNewPassword)
+app.post("/auth/send-password-link", UserController.sendMail)
+app.get("/auth/create-new-password/:id/:token", UserController.createNewPassword)
 
 app.post('/posts', checkAuth, postsCreateValidation, handleValidationErrors, PostController.create);
 app.patch('/posts/:id', checkAuth, postsCreateValidation, handleValidationErrors, PostController.update);
@@ -93,15 +93,14 @@ app.delete('/posts/:id', checkAuth, PostController.remove);
 
 app.get('/posts/popular/:limit', checkAuth, postsCreateValidation, PostController.getAllPostByViews);
 
-app.get('/posts',PostController.getSortPosts);
+app.get('/posts', PostController.getSortPosts);
 
 app.post('/comments', checkAuth, commentsCreateValidation, handleValidationErrors, CommentsController.create);
-app.get('/comments',CommentsController.getLastComments)
+app.get('/comments', CommentsController.getLastComments)
 app.get('/comments/:id', CommentsController.getAllInPost)
 app.get('/comments', CommentsController.getAll)
 app.delete('/comments/:id', checkAuth, CommentsController.remove);
 app.patch('/comments/:id', checkAuth, commentsCreateValidation, handleValidationErrors, CommentsController.update);
-
 
 
 const PORT = process.env.PORT || LOCAL_PORT
