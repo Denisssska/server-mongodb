@@ -12,6 +12,8 @@ import * as CommentsController from "./controllers/CommentsController.js";
 import * as fs from "fs";
 import {commentsCreateValidation} from "./validations/CommentsValidation.js";
 import {LOCAL_PORT, MongoDBDen} from "./utils/config.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 
 const storage = multer.diskStorage({
@@ -28,7 +30,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage})
 
-mongoose.connect(process.env.MONGODB_URI || MongoDBDen)
+mongoose.connect(process.env.MONGO_DB_URI)
     .then(
         () => {
             console.log('db connected')
