@@ -65,11 +65,11 @@ app.use(allowCrossDomain)
 app.use(express.json())
 app.use('/uploads', express.static('uploads'))//чтобы можно было открыть картинку в урле
 
-app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
-    res.json({
-        url: `/uploads/${req.file.originalname}`
-    })
-})
+// app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
+//     res.json({
+//         url: `/uploads/${req.file.originalname}`
+//     })
+// })
 app.post('/update', checkAuth, upload.single('image'), (req, res) => {
     res.json({
         url: `/uploads/${req.file.originalname}`
@@ -102,7 +102,8 @@ app.delete('/comments/:id', checkAuth, CommentsController.remove);
 app.patch('/comments/:id', checkAuth, commentsCreateValidation, handleValidationErrors, CommentsController.update);
 
 
-const PORT = process.env.PORT || LOCAL_PORT
+ const PORT = process.env.PORT || LOCAL_PORT
+
 const start = async () => {
     try {
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
